@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  cassandra:
+    image: cassandra:3.11
+#    volumes:
+#      - cassandra/data:/var/lib/cassandra
+    
+  php:
+    build: php
+    volumes:
+        - ./code:/www
+    links:
+      - cassandra
+
+  nginx:
+    build: nginx
+    volumes:
+      - ./code:/www
+      - ./config/site.conf:/etc/nginx/conf.d/site.conf
+    ports:
+      - "80:80"
+    links:
+      - php
