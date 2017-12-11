@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+
+  cassandra:
+    image: gc9623/simplephpapplication_cassandra
+    
+  php:
+    image: gc9623/simplephpapplication_php
+    volumes:
+        - ./code:/www
+    links:
+      - cassandra
+
+  nginx:
+    image: gc9623/simplephpapplication_nginx
+    volumes:
+      - ./code:/www
+      - ./config/site.conf:/etc/nginx/conf.d/site.conf
+    ports:
+      - "80:80"
+    links:
+      - php
