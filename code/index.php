@@ -25,6 +25,10 @@ CREATE TABLE test (
   PRIMARY KEY (id)
 );
 EOD;
+$insertEntry = <<<EOD
+INSERT INTO test (id, test) 
+VALUES (NOW(), 'test');
+EOD;
 
 try {
 	$session->execute($createKeyspace);
@@ -33,6 +37,12 @@ try {
 try {
 	$session = $cluster->connect('projekt1');
 	$session->execute($createTable);
+} catch (Cassandra\Exception\AlreadyExistsException $e) { 
+
+}
+try {
+	$session = $cluster->connect('projekt1');
+	$session->execute($insertEntry);
 } catch (Cassandra\Exception\AlreadyExistsException $e) { 
 
 }
